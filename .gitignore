@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+npm-debug.log
+
+# Variables de entorno
+.env
+
+# Archivos subidos
+uploads/
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Directorios de desarrollo/build
+dist/
+build/
+coverage/
+
+# Logs
+logs/
+*.log
+
+# Cache de Hugging Face
+.cache/

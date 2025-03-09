@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sistema RAG con Embeddings</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+	<header>
+		<h1>Sistema de Recuperación de Información con Embeddings</h1>
+		<p>Usando tecnología RAG (Retrieval-Augmented Generation)</p>
+	</header>
+
+	<main>
+		<div class="container">
+			<div class="documents-section">
+				<div class="section-header">
+					<h2>Documentos</h2>
+					<button id="uploadBtn" class="btn primary"><i class="fas fa-upload"></i> Subir documento</button>
+				</div>
+				<div class="upload-form" id="uploadForm" style="display: none;">
+					<form id="documentForm" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="title">Título del documento:</label>
+							<input type="text" id="title" name="title" required>
+						</div>
+						<div class="form-group">
+							<label for="file">Archivo (PDF, TXT, MD, JSON):</label>
+							<input type="file" id="file" name="file" accept=".pdf,.txt,.md,.json" required>
+						</div>
+						<div class="form-actions">
+							<button type="submit" class="btn primary">Procesar documento</button>
+							<button type="button" id="cancelUpload" class="btn secondary">Cancelar</button>
+						</div>
+					</form>
+				</div>
+				<div id="processing" class="processing" style="display: none;">
+					<i class="fas fa-spinner fa-spin"></i>
+					<p>Procesando documento...</p>
+				</div>
+				<div class="documents-list" id="documentsList">
+					<p class="empty-state">No hay documentos procesados. Sube un documento para comenzar.</p>
+				</div>
+			</div>
+
+			<div class="queries-section">
+				<div class="section-header">
+					<h2>Consultas</h2>
+				</div>
+				<div class="query-form">
+					<form id="queryForm">
+						<div class="form-group">
+							<label for="query">Haz una pregunta sobre tus documentos:</label>
+							<textarea id="query" name="query" rows="3"
+								placeholder="Ej: ¿Cuáles son los pasos principales para implementar RAG?"
+								required></textarea>
+						</div>
+						<div class="form-actions">
+							<button type="submit" class="btn primary">Enviar consulta</button>
+							<button type="button" id="clearConversation" class="btn secondary">Nueva
+								conversación</button>
+						</div>
+					</form>
+				</div>
+				<div id="conversation" class="conversation">
+					<p class="empty-state">Haz una pregunta para comenzar la conversación.</p>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer>
+		<p>Sistema RAG con Embeddings &copy; 2025 - Desarrollado por <a href="https://github.com/drosell271"
+				target="_blank">Daniel Rosell</a></p>
+	</footer>
+
+	<script src="js/app.js"></script>
+</body>
+
+</html>
