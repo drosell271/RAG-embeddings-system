@@ -160,8 +160,8 @@ Si la información proporcionada no es suficiente, indícalo.`
   const response = await openai.chat.completions.create({
     model: process.env.OPENAI_COMPLETION_MODEL || "gpt-4o-mini",
     messages: messages,
-    temperature: 0.3,
-    max_tokens: 1000
+		temperature: parseFloat(process.env.OPENAI_TEMPERATURE) || 0.7,
+		max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS, 10) || 1000,
   });
   
   // Extraer información de uso de tokens
@@ -189,43 +189,33 @@ Estima el costo en USD basado en el uso de tokens y el modelo:
 
 ```javascript
 function calculateEstimatedCost(promptTokens, completionTokens, model) {
-  // Precios por 1000 tokens según OpenAI
-  const pricing = {
-    "gpt-4o-mini": {
-      prompt: 0.00015,    // $0.15 por 1000 tokens de prompt
-      completion: 0.00060  // $0.60 por 1000 tokens de completion
-    },
-    "gpt-4o": {
-      prompt: 0.00050,    // $0.50 por 1000 tokens de prompt
-      completion: 0.00150  // $1.50 por 1000 tokens de completion
-    },
-    "gpt-4": {
-      prompt: 0.00030,    // $0.30 por 1000 tokens de prompt
-      completion: 0.00060  // $0.60 por 1000 tokens de completion
-    },
-    "gpt-3.5-turbo": {
-      prompt: 0.00010,    // $0.10 por 1000 tokens de prompt
-      completion: 0.00020  // $0.20 por 1000 tokens de completion
-    }
-  };
-  
-  // Usar fallback si el modelo no está en la lista
-  const modelPricing = pricing[model] || pricing["gpt-4o-mini"];
-  
-  // Calcular costo
-  const promptCost = (promptTokens / 1000) * modelPricing.prompt;
-  const completionCost = (completionTokens / 1000) * modelPricing.completion;
-  const totalCost = promptCost + completionCost;
-  
-  return {
-    usd: totalCost.toFixed(6),
-    model: model,
-    breakdown: {
-      prompt_cost: promptCost.toFixed(6),
-      completion_cost: completionCost.toFixed(6)
-    }
-  };
+	// Precios por 1M tokens según https://openai.com/pricing
+	// Nota: Estos precios pueden cambiar, mantener actualizado
+	const pricing = {
+		"gpt-4o-mini": {
+			prompt: 0.15 / 1000000, // $0.15 por 1M tokens de prompt
+			completion: 0.6 / 1000000, // $0.60 por 1M tokens de completion
+		},
+	};
+
+	// Usar gpt-4o-mini como fallback si el modelo no está en la lista
+	const modelPricing = pricing[model] || pricing["gpt-4o-mini"];
+
+	// Calcular costo
+	const promptCost = promptTokens * modelPricing.prompt;
+	const completionCost = completionTokens * modelPricing.completion;
+	const totalCost = promptCost + completionCost;
+
+	return {
+		usd: totalCost.toFixed(6),
+		model: model,
+		breakdown: {
+			prompt_cost: promptCost.toFixed(6),
+			completion_cost: completionCost.toFixed(6),
+		},
+	};
 }
+
 ```
 
 ## Flujo de Datos
@@ -421,6 +411,8 @@ Para ajustar el modelo utilizado y sus costos asociados:
 ```
 # En .env
 OPENAI_COMPLETION_MODEL=gpt-4o-mini  # Modelo más económico
+OPENAI_TEMPERATURE=0.5
+OPENAI_MAX_TOKENS=10000
 ```
 
 Modelos disponibles y sus características:

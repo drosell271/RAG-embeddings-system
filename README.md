@@ -131,6 +131,8 @@ CHUNK_OVERLAP=100          # Solapamiento entre fragmentos (default: 50)
 # Modelos disponibles
 HUGGINGFACE_EMBEDDING_MODEL=sentence-transformers/all-mpnet-base-v2
 OPENAI_COMPLETION_MODEL=gpt-4    # Afecta al costo por token
+OPENAI_TEMPERATURE=0.5
+OPENAI_MAX_TOKENS=10000
 ```
 
 Para detalles técnicos completos, consulta la [Guía Técnica](docs/Guia-Tecnica.md).
